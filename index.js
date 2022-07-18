@@ -75,24 +75,6 @@ const contributorsNextQuest = [
       { name: "9", value: "9" },
       { name: "10", value: "10" },
     ],
-    then: (response) => {
-      let contQuestions = [];
-      for (let i = 0; i < response.contributorCount; i++) {
-        contQuestions.push(
-          {
-            type: "input",
-            message: `What is the name of contributor ${i + 1}?`,
-            name: `contributorName${i}`,
-          },
-          {
-            type: "input",
-            message: `What is the GitHub username of contributor ${i + 1}?`,
-            name: `contributorUsername${i}`,
-          }
-        );
-      }
-      return contQuestions;
-    },
   },
 ];
 
@@ -112,13 +94,35 @@ const contributorsNextQuest = [
 init = () => {
   inquirer.prompt(questions).then((response) => {
     response.contributing
-      ? inquirer.prompt(contributorsNextQuest).then((contResponse) => {
-          fs.writeFile(
-            "README.md",
-            myContReadme(response, contResponse),
-            (err) => (err ? console.log(err) : console.log("You Did It!"))
-          );
-        })
+      ? inquirer
+          .prompt(contributorsNextQuest)
+          .then((response) => {
+            let contQuestions = [];
+            for (let i = 0; i < response.contributorCount; i++) {
+              contQuestions.push(
+                {
+                  type: "input",
+                  message: `What is the name of contributor ${i + 1}?`,
+                  name: `contributorName${i}`,
+                },
+                {
+                  type: "input",
+                  message: `What is the GitHub username of contributor ${
+                    i + 1
+                  }?`,
+                  name: `contributorUsername${i}`,
+                }
+              );
+            }
+            return contQuestions;
+          })
+          .then((contResponse) => {
+            fs.writeFile(
+              "README.md",
+              myContReadme(response, contResponse),
+              (err) => (err ? console.log(err) : console.log("You Did It!"))
+            );
+          })
       : fs.writeFile("README.md", myReadme(response), (err) =>
           err ? console.log(err) : console.log("You Did It!")
         );
@@ -162,7 +166,6 @@ ${data.description}
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [Tests](#tests)
 ${generateBadge.renderLicenseLink(data.license)}
 - [Questions](#questions)
