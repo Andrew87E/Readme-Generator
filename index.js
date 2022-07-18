@@ -4,11 +4,6 @@ const inquirer = require("inquirer");
 const fs = require("fs");
 const generateBadge = require("./utils/generateMarkdown");
 
-const Console = require("console");
-const logger = new console.Console({
-  stdout: fs.createWriteStream('./output.txt')
-})
-
 // TODO: Create an array of questions for user input
 const questions = [
   {
@@ -61,8 +56,10 @@ const questions = [
       { name: "No", value: "No" },
     ],
   },
+];
+
+const contributorsNextQuest = [
   {
-    when: (answers) => answers.contributing === 'Yes',
     type: "list",
     message: "How many contributors?",
     name: "contributorCount",
@@ -81,65 +78,55 @@ const questions = [
   },
 ];
 
-// const contributorsNextQuest = [
+//   const contributorQuestions = [
 //   {
-//     type: "list",
-//     message: "How many contributors?",
-//     name: "contributorCount",
-//     choices: [
-//       { name: "1", value: "1" },
-//       { name: "2", value: "2" },
-//       { name: "3", value: "3" },
-//       { name: "4", value: "4" },
-//       { name: "5", value: "5" },
-//       { name: "6", value: "6" },
-//       { name: "7", value: "7" },
-//       { name: "8", value: "8" },
-//       { name: "9", value: "9" },
-//       { name: "10", value: "10" },
-//     ],
+//     type: "input",
+//     message: "What were their names?",
+//     name: "contributorName",
+//   },
+//   {
+//     type: "input",
+//     message: "What were their github usernames?",
+//     name: "contributorUsername",
 //   },
 // ];
 
 init = () => {
   inquirer.prompt(questions).then((response) => {
-    if (response.contributorCount) {
-      // Prompt more
-      let contQuestions = [];
-      for (let i = 0; i < response.contributorCount; i++) {
-        contQuestions.push(
-          {
-            type: "input",
-            message: `What is the name of contributor ${i + 1}?`,
-            name: `contributorName${i}`,
-          },
-          {
-            type: "input",
-            message: `What is the GitHub username of contributor ${
-              i + 1
-            }?`,
-            name: `contributorUsername${i}`,
-          }
+    response.contributing
+      ? inquirer
+          .prompt(contributorsNextQuest)
+          .then((response) => {
+            let contQuestions = [];
+            for (let i = 0; i < response.contributorCount; i++) {
+              contQuestions.push(
+                {
+                  type: "input",
+                  message: `What is the name of contributor ${i + 1}?`,
+                  name: `contributorName${i}`,
+                },
+                {
+                  type: "input",
+                  message: `What is the GitHub username of contributor ${
+                    i + 1
+                  }?`,
+                  name: `contributorUsername${i}`,
+                }
+              );
+            }
+            return contQuestions;
+          })
+          .then((contResponse) => {
+            fs.writeFile(
+              "README.md",
+              myContReadme(response, contResponse),
+              (err) => (err ? console.log(err) : console.log("You Did It!"))
+            );
+          })
+      : fs.writeFile("README.md", myReadme(response), (err) =>
+          err ? console.log(err) : console.log("You Did It!")
         );
-      }
-      inquirer.prompt(contQuestions).then((contResponse) => {
-        // Merge contReponse with response
-        logger.log(response);
-        logger.log(contResponse);
-        // Write it out
-        fs.writeFile(
-          "README.md",
-          myContReadme(response, contResponse),
-          (err) => (err ? console.log(err) : console.log("You Did It!"))
-        );
-      })
-    }
-    else {
-      // Write it out
-      fs.writeFile("README.md", myReadme(response), (err) =>
-          err ? console.log(err) : console.log("You Did It!"));
-    }
-  })
+  });
 };
 
 const myContReadme = (data) => {
