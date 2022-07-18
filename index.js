@@ -28,11 +28,6 @@ const questions = [
   },
   {
     type: "input",
-    message: "Credit all contributing parties here",
-    name: "contributing",
-  },
-  {
-    type: "input",
     message: "Enter tests here",
     name: "tests",
   },
@@ -52,18 +47,114 @@ const questions = [
     message: "Enter your email address",
     name: "email",
   },
+  {
+    type: "list",
+    message: "Were there any contributors?",
+    name: "contributing",
+    choices: [
+      { name: "Yes", value: "Yes" },
+      { name: "No", value: "No" },
+    ],
+  },
 ];
 
-init = function () {
+const contributorsNextQuest = [
+  {
+    type: "list",
+    message: "How many contributors?",
+    name: "contributorCount",
+    choices: [
+      { name: "1", value: "1" },
+      { name: "2", value: "2" },
+      { name: "3", value: "3" },
+      { name: "4", value: "4" },
+      { name: "5", value: "5" },
+      { name: "6", value: "6" },
+      { name: "7", value: "7" },
+      { name: "8", value: "8" },
+      { name: "9", value: "9" },
+      { name: "10", value: "10" },
+    ],
+    then: (response) => {
+      let contQuestions = [];
+      for (let i = 0; i < response.contributorCount; i++) {
+        contQuestions.push(
+          {
+            type: "input",
+            message: `What is the name of contributor ${i + 1}?`,
+            name: `contributorName${i}`,
+          },
+          {
+            type: "input",
+            message: `What is the GitHub username of contributor ${i + 1}?`,
+            name: `contributorUsername${i}`,
+          }
+        );
+      }
+      return contQuestions;
+    },
+  },
+];
+
+//   const contributorQuestions = [
+//   {
+//     type: "input",
+//     message: "What were their names?",
+//     name: "contributorName",
+//   },
+//   {
+//     type: "input",
+//     message: "What were their github usernames?",
+//     name: "contributorUsername",
+//   },
+// ];
+
+init = () => {
   inquirer.prompt(questions).then((response) => {
-    fs.writeFile("README.md", myReadme(response), (err) =>
-      err ? console.log(err) : console.log("success!")
-    );
+    response.contributing
+      ? inquirer.prompt(contributorsNextQuest).then((contResponse) => {
+          fs.writeFile(
+            "README.md",
+            myContReadme(response, contResponse),
+            (err) => (err ? console.log(err) : console.log("You Did It!"))
+          );
+        })
+      : fs.writeFile("README.md", myReadme(response), (err) =>
+          err ? console.log(err) : console.log("You Did It!")
+        );
   });
 };
 
+const myContReadme = (data) => {
+  return `
+  # ${data.title}
+  ${generateBadge.renderLicenseBadge(data.license)} 
+  ## Description
+  ${data.description}
+  ## Table of contents
+  - [Description](#description)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [Tests](#tests)
+  ${generateBadge.renderLicenseLink(data.license)}
+  - [Questions](#questions)
+  ## Installation
+  ${data.install}
+  ## Contributing
+  [${data.contributorName}](${data.contributorUsername})
+  ## Tests
+  ${data.tests}
+  ${generateBadge.renderLicenseSection(data.license)}
+  ## Questions
+  Email: ${data.email}
+  Github: https://www.github.com/${data.username}
+        `;
+};
+
 const myReadme = (data) => {
-  return `# ${data.title}
+  return `
+  # ${data.title}
 ${generateBadge.renderLicenseBadge(data.license)} 
 ## Description
 ${data.description}
@@ -77,8 +168,6 @@ ${generateBadge.renderLicenseLink(data.license)}
 - [Questions](#questions)
 ## Installation
 ${data.install}
-## Contributing
-${data.contributing}
 ## Tests
 ${data.tests}
 ${generateBadge.renderLicenseSection(data.license)}
