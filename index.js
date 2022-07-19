@@ -42,6 +42,11 @@ const questions = [
     name: "demoLink",
   },
   {
+    type: "input",
+    message: "What is your email address?",
+    name: "contributing",
+  },
+  {
     type: "list",
     message: "Select license for your project",
     choices: ["MIT", "BSD-3", "APACHE-2.0", "GPL-3.0", "none"],
@@ -57,17 +62,28 @@ const questions = [
     message: "Enter your email address",
     name: "email",
   },
+  // {
+  //   type: "input",
+  //   message: "Do you want a To-Do list?",
+  //   name: "toDo",
+  // },
+  // {
+  //   when: (answers) => answers.toDo === "yes",
+  //   type: "input",
+  //   message: "How many To-Do items do you want to add?",
+  //   name: "toDoCount",
+  // },
   {
     type: "list",
     message: "Were there any contributors?",
-    name: "contributing",
+    name: "contributors",
     choices: [
       { name: "Yes", value: "Yes" },
       { name: "No", value: "No" },
     ],
   },
   {
-    when: (answers) => answers.contributing === "Yes",
+    when: (answers) => answers.contributors === "Yes",
     type: "list",
     message: "How many contributors?",
     name: "contributorCount",
@@ -143,7 +159,7 @@ const myContReadme = (data) => {
   - [Usage](#usage)
   - [Contributing](#contributing)
   - [Demo](#Demo)
-  - [How to Contribute](#howToContribute)
+  - [Contributing](#contributing)
   ${generateBadge.renderLicenseLink(data.license)}
   - [Questions](#questions)
   ## Installation
@@ -157,14 +173,13 @@ const myContReadme = (data) => {
   ## How to Contribute
   [Contributor Covenant](https://www.contributor-covenant.org/)
   ## Questions
-  Email: ${data.email}
-  Github: https://www.github.com/${data.username}
+  Shoot me an [Email](${data.email})
+  Check out my [Github](https://www.github.com/${data.username})!
   ${generateBadge.renderLicenseSection(data.license)}
         `;
 };
 
 
-// npm badge ![npm](https://img.shields.io/npm/v/npm?style=plastic)
 // add todo list
 
 const myReadme = (data) => {
@@ -178,6 +193,7 @@ ${data.description}
 - [Installation](#installation)
 - [Usage](#usage)
 - [Demo](#Demo)
+- [Contributing](#contributing)
 ${generateBadge.renderLicenseLink(data.license)}
 - [Questions](#questions)
 ## Installation
@@ -188,8 +204,8 @@ ${data.usage}
 See it in action on ${data.demoHost}!
 ${data.demoLink}
 ## Questions
-Email: ${data.email}
-Github: https://www.github.com/${data.username}
+Shoot me an [Email](${data.email})
+Check out my [Github](https://www.github.com/${data.username})!
 ${generateBadge.renderLicenseSection(data.license)}
       `;
 };

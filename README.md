@@ -7,7 +7,7 @@
 
 
 ## Description
-A simple readme generator using inquirer
+A simple command line readme generator using inquirer
 ## Table of contents
 - [Description](#description)
 - [Installation](#installation)
@@ -17,8 +17,10 @@ A simple readme generator using inquirer
 - [Questions](#questions)
 - [Contributors](#contributors)
 ## Installation
-Node.js and Inquirer
+This application needs node and npm to function. To use this aplication dowload the code and from your command line use ```npm i``` to install dependancies, then use ```node index.js``` to run the application!
+
 ## Usage
+This application can be used to make an awesome readme for your project!
 Check the [Video](youtube.com)!
 ## Demo
 See it in action on Github Pages!
