@@ -6,8 +6,8 @@ const generateBadge = require("./utils/generateMarkdown");
 
 const Console = require("console");
 const logger = new console.Console({
-  stdout: fs.createWriteStream('./output.txt')
-})
+  stdout: fs.createWriteStream("./output.txt"),
+});
 
 // TODO: Create an array of questions for user input
 const questions = [
@@ -33,13 +33,18 @@ const questions = [
   },
   {
     type: "input",
-    message: "Enter tests here",
-    name: "tests",
+    message: "Where is your Demo hosted?",
+    name: "demoHost",
+  },
+  {
+    type: "input",
+    message: "Enter your Demo url here",
+    name: "demoLink",
   },
   {
     type: "list",
     message: "Select license for your project",
-    choices: ["MIT", "BSD 3", "APACHE 2.0", "GPL 3.0", "none"],
+    choices: ["MIT", "BSD-3", "APACHE-2.0", "GPL-3.0", "none"],
     name: "license",
   },
   {
@@ -62,7 +67,7 @@ const questions = [
     ],
   },
   {
-    when: (answers) => answers.contributing === 'Yes',
+    when: (answers) => answers.contributing === "Yes",
     type: "list",
     message: "How many contributors?",
     name: "contributorCount",
@@ -81,26 +86,6 @@ const questions = [
   },
 ];
 
-// const contributorsNextQuest = [
-//   {
-//     type: "list",
-//     message: "How many contributors?",
-//     name: "contributorCount",
-//     choices: [
-//       { name: "1", value: "1" },
-//       { name: "2", value: "2" },
-//       { name: "3", value: "3" },
-//       { name: "4", value: "4" },
-//       { name: "5", value: "5" },
-//       { name: "6", value: "6" },
-//       { name: "7", value: "7" },
-//       { name: "8", value: "8" },
-//       { name: "9", value: "9" },
-//       { name: "10", value: "10" },
-//     ],
-//   },
-// ];
-
 init = () => {
   inquirer.prompt(questions).then((response) => {
     if (response.contributorCount) {
@@ -115,31 +100,35 @@ init = () => {
           },
           {
             type: "input",
-            message: `What is the GitHub username of contributor ${
-              i + 1
-            }?`,
+            message: `What is the GitHub username of contributor ${i + 1}?`,
             name: `contributorUsername${i}`,
           }
         );
       }
       inquirer.prompt(contQuestions).then((contResponse) => {
-        // Merge contReponse with response
-        logger.log(response);
-        logger.log(contResponse);
-        // Write it out
+        let contWrite = (contResponse) => {
+          let cont = "";
+          for (let i = 0; i < contResponse.contributorCount; i++) {
+            cont += `
+            ## Contributors
+            [${contResponse.contributorName.i}](${contResponse.contributorUsername.i})            
+            `;
+          }
+          return cont;
+        };
         fs.writeFile(
           "README.md",
-          myContReadme(response, contResponse),
+          myContReadme(response, contWrite, contResponse),
           (err) => (err ? console.log(err) : console.log("You Did It!"))
         );
-      })
-    }
-    else {
+      });
+    } else {
       // Write it out
       fs.writeFile("README.md", myReadme(response), (err) =>
-          err ? console.log(err) : console.log("You Did It!"));
+        err ? console.log(err) : console.log("You Did It!")
+      );
     }
-  })
+  });
 };
 
 const myContReadme = (data) => {
@@ -153,21 +142,30 @@ const myContReadme = (data) => {
   - [Installation](#installation)
   - [Usage](#usage)
   - [Contributing](#contributing)
-  - [Tests](#tests)
+  - [Demo](#Demo)
+  - [How to Contribute](#howToContribute)
   ${generateBadge.renderLicenseLink(data.license)}
   - [Questions](#questions)
   ## Installation
-  ${data.install}
-  ## Contributing
-  [${data.contributorName}](${data.contributorUsername})
-  ## Tests
-  ${data.tests}
-  ${generateBadge.renderLicenseSection(data.license)}
+  ${data.install}  
+  ## Usage
+  ${data.usage}
+  ${data.contResponse}
+  ## Demo
+  See it in action on ${data.demoHost}!
+  ${data.demoLink}
+  ## How to Contribute
+  [Contributor Covenant](https://www.contributor-covenant.org/)
   ## Questions
   Email: ${data.email}
   Github: https://www.github.com/${data.username}
+  ${generateBadge.renderLicenseSection(data.license)}
         `;
 };
+
+
+// npm badge ![npm](https://img.shields.io/npm/v/npm?style=plastic)
+// add todo list
 
 const myReadme = (data) => {
   return `
@@ -179,17 +177,20 @@ ${data.description}
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Tests](#tests)
+- [Demo](#Demo)
 ${generateBadge.renderLicenseLink(data.license)}
 - [Questions](#questions)
 ## Installation
 ${data.install}
-## Tests
-${data.tests}
-${generateBadge.renderLicenseSection(data.license)}
+## Usage
+${data.usage}
+## Demo
+See it in action on ${data.demoHost}!
+${data.demoLink}
 ## Questions
 Email: ${data.email}
 Github: https://www.github.com/${data.username}
+${generateBadge.renderLicenseSection(data.license)}
       `;
 };
 

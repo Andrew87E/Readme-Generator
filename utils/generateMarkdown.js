@@ -1,7 +1,7 @@
 // TODO: Create a function that returns a license badge based on which license is passed in
 const renderLicenseBadge = (license) => {
   return license
-    ? `![License: ${license}](https://img.shields.io/badge/License-${license}-yellow.svg)`
+    ? `![License: ${license}](https://img.shields.io/static/v1?label=License&message=${license}&color=yellow&style=plastic)`
     : ``;
 };
 
