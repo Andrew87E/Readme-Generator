@@ -140,7 +140,7 @@ init = () => {
 const myContReadme = (data) => {
   return `
   # ${data.title}
-  ${generateBadge.renderLicenseBadge(data.license)}
+  ${generateBadge.renderLicenseBadge(data.license)}<br>
   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
   ## Description
@@ -179,7 +179,7 @@ const myContReadme = (data) => {
 const myReadme = (data) => {
   return `
   # ${data.title}
-${generateBadge.renderLicenseBadge(data.license)}
+${generateBadge.renderLicenseBadge(data.license)}<br>
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
 ## Description

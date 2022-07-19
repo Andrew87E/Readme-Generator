@@ -1,5 +1,4 @@
-
-  # Readme Generator
+# Readme Generator
 ![License: MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=yellow&style=for-the-badge)<br>
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)<br>
 ![npm](https://img.shields.io/npm/v/npm?style=plastic&logo=nodedotjs)
