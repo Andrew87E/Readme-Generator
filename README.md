@@ -170,6 +170,12 @@ For answers to common questions about this code of conduct, see the FAQ at
 ## Contributors
 [Kurt Bixby](https://github.com/kurtbixby)
 
+## Team
+
+[![Andrew Edwards](https://avatars.githubusercontent.com/u/106359255?size=100)](https://github.com/andrew87e)
+
+[Andrew Edwards](https://github.com/andrew87e)
+
 ## Questions
 Shoot me an [Email](andrew87e@gmail.com)<br>
 Check out my [Github](https://www.github.com/andrew87e)!
