@@ -4,11 +4,6 @@ const inquirer = require("inquirer");
 const fs = require("fs");
 const generateBadge = require("./utils/generateMarkdown");
 
-const Console = require("console");
-const logger = new console.Console({
-  stdout: fs.createWriteStream("./output.txt"),
-});
-
 // TODO: Create an array of questions for user input
 const questions = [
   {

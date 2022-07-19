@@ -31,4 +31,6 @@ module.exports = {
 ![npm](https://img.shields.io/npm/v/npm?style=plastic&logo=nodedotjs)
 ![npm](https://img.shields.io/badge/npm%20package-inquirer%406.3.1-brightgreen?style=plastic&logo=nodedotjs)<br>
 ![GitHub issues](https://img.shields.io/github/issues/andrew87e/Readme-Generator?style=plastic)
+[Kurt Bixby](https://github.com/kurtbixby)
+
 */
