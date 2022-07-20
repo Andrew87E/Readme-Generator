@@ -68,7 +68,7 @@ const questions = [
     message: "Were there any contributors?",
     name: "contributors",
     choices: [
-      // { name: "Yes", value: "Yes" },
+      { name: "Yes", value: "Yes" },
       { name: "No", value: "No" },
     ],
   },
@@ -112,20 +112,14 @@ init = () => {
         );
       }
       inquirer.prompt(contQuestions).then((contResponse) => {
-        let contWrite = (contResponse) => {
-          let cont = "";
-          for (let i = 0; i < contResponse.contributorCount; i++) {
-            cont += `
-            ## Contributors
-            [${contResponse.contributorName.i}](${contResponse.contributorUsername.i})            
+        let cont = "";
+        for (let i = 0; i < response.contributorCount; i++) {
+          cont += `
+[${contResponse[`contributorName${i}`]}](https://www.github.com/${contResponse[`contributorUsername${i}`]})            
             `;
-          }
-          return cont;
-        };
-        fs.writeFile(
-          "README.md",
-          myContReadme(response, contWrite, contResponse),
-          (err) => (err ? console.log(err) : console.log("You Did It!"))
+        }
+        fs.writeFile("README.md", myContReadme(response, cont), (err) =>
+          err ? console.log(err) : console.log("You Did It!")
         );
       });
     } else {
@@ -137,7 +131,7 @@ init = () => {
   });
 };
 
-const myContReadme = (data) => {
+const myContReadme = (data, contributorSection) => {
   return `
   # ${data.title}
   ${generateBadge.renderLicenseBadge(data.license)}<br>
@@ -157,7 +151,8 @@ const myContReadme = (data) => {
   ${data.install}  
   ## Usage
   ${data.usage}
-  ${data.contResponse}
+  ## Contributors
+  ${contributorSection}
   ## Demo
   See it in action on [${data.demoHost}](${data.demoLink})!
   ## Contributing
@@ -172,7 +167,6 @@ const myContReadme = (data) => {
   ${generateBadge.renderLicenseSection(data.license)}
         `;
 };
-
 
 // add todo list
 
@@ -212,14 +206,6 @@ ${generateBadge.renderLicenseSection(data.license)}
 };
 
 init();
-
-
-
-
-
-
-
-
 
 const contCovenant = `
 # Contributor Covenant Code of Conduct
