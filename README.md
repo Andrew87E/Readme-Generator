@@ -8,6 +8,8 @@
 ## Description
 A simple command line readme generator using inquirer
 
+![Screenshot](./assets/img/Readme-Gen.gif)
+
 ## Table of contents
 - [Description](#description)
 - [Installation](#installation)
